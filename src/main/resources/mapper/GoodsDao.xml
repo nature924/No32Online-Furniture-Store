@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.GoodsDao">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.id as id
+        ,a.goods_name as goodsName
+        ,a.goods_types as goodsTypes
+        ,a.goods_photo as goodsPhoto
+        ,a.goods_kucun_number as goodsKucunNumber
+        ,a.goods_old_money as goodsOldMoney
+        ,a.goods_new_money as goodsNewMoney
+        ,a.goods_clicknum as goodsClicknum
+        ,a.shangxia_types as shangxiaTypes
+        ,a.goods_delete as goodsDelete
+        ,a.goods_content as goodsContent
+        ,a.create_time as createTime
+    </sql>
+    <select id="selectListView" parameterType="map" resultType="com.entity.view.GoodsView" >
+        SELECT
+        <include refid="Base_Column_List" />
+
+--         级联表的字段
+
+        FROM goods  a
+
+        <where>
+            <if test="params.ids != null">
+                and a.id in
+                <foreach item="item" index="index" collection="params.ids" open="(" separator="," close=")">
+                #{item}
+                </foreach>
+            </if>
+            <if test=" params.goodsName != '' and params.goodsName != null and params.goodsName != 'null' ">
+                and a.goods_name like CONCAT('%',#{params.goodsName},'%')
+            </if>
+            <if test="params.goodsTypes != null and params.goodsTypes != ''">
+                and a.goods_types = #{params.goodsTypes}
+            </if>
+            <if test="params.goodsKucunNumberStart != null and params.goodsKucunNumberStart != ''">
+                <![CDATA[  and a.goods_kucun_number >= #{params.goodsKucunNumberStart}   ]]>
+            </if>
+            <if test="params.goodsKucunNumberEnd != null and params.goodsKucunNumberEnd != ''">
+                <![CDATA[  and a.goods_kucun_number <= #{params.goodsKucunNumberEnd}   ]]>
+            </if>
+             <if test="params.goodsKucunNumber != null and params.goodsKucunNumber != ''">
+                and a.goods_kucun_number = #{params.goodsKucunNumber}
+             </if>
+            <if test="params.goodsOldMoneyStart != null ">
+                <![CDATA[  and a.goods_old_money >= #{params.goodsOldMoneyStart}   ]]>
+            </if>
+            <if test="params.goodsOldMoneyEnd != null ">
+                <![CDATA[  and a.goods_old_money <= #{params.goodsOldMoneyEnd}   ]]>
+            </if>
+            <if test="params.goodsNewMoneyStart != null ">
+                <![CDATA[  and a.goods_new_money >= #{params.goodsNewMoneyStart}   ]]>
+            </if>
+            <if test="params.goodsNewMoneyEnd != null ">
+                <![CDATA[  and a.goods_new_money <= #{params.goodsNewMoneyEnd}   ]]>
+            </if>
+            <if test="params.goodsClicknumStart != null and params.goodsClicknumStart != ''">
+                <![CDATA[  and a.goods_clicknum >= #{params.goodsClicknumStart}   ]]>
+            </if>
+            <if test="params.goodsClicknumEnd != null and params.goodsClicknumEnd != ''">
+                <![CDATA[  and a.goods_clicknum <= #{params.goodsClicknumEnd}   ]]>
+            </if>
+             <if test="params.goodsClicknum != null and params.goodsClicknum != ''">
+                and a.goods_clicknum = #{params.goodsClicknum}
+             </if>
+            <if test="params.shangxiaTypes != null and params.shangxiaTypes != ''">
+                and a.shangxia_types = #{params.shangxiaTypes}
+            </if>
+            <if test="params.goodsDeleteStart != null and params.goodsDeleteStart != ''">
+                <![CDATA[  and a.goods_delete >= #{params.goodsDeleteStart}   ]]>
+            </if>
+            <if test="params.goodsDeleteEnd != null and params.goodsDeleteEnd != ''">
+                <![CDATA[  and a.goods_delete <= #{params.goodsDeleteEnd}   ]]>
+            </if>
+             <if test="params.goodsDelete != null and params.goodsDelete != ''">
+                and a.goods_delete = #{params.goodsDelete}
+             </if>
+            <if test=" params.goodsContent != '' and params.goodsContent != null and params.goodsContent != 'null' ">
+                and a.goods_content like CONCAT('%',#{params.goodsContent},'%')
+            </if>
+
+        </where>
+
+        order by a.${params.orderBy} desc 
+    </select>
+
+</mapper>
